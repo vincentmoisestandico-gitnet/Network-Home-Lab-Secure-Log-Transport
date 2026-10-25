@@ -1,0 +1,33 @@
+name: bank-lab
+topology:
+  nodes:
+    fw-a:
+      kind: linux
+      image: lab-node:latest
+      cap-add: [NET_ADMIN]
+      binds: [configs/fw-a:/config]
+    fw-b:
+      kind: linux
+      image: lab-node:latest
+      cap-add: [NET_ADMIN]
+      binds: [configs/fw-b:/config]
+    isp:
+      kind: linux
+      image: lab-node:latest
+      cap-add: [NET_ADMIN]
+    app-a:
+      kind: linux
+      image: lab-node:latest
+    mgmt-a:
+      kind: linux
+      image: lab-node:latest
+    collector:
+      kind: linux
+      image: lab-node:latest
+      binds: [configs/collector:/config]
+  links:
+    - endpoints: ["fw-a:eth1", "app-a:eth1"]
+    - endpoints: ["fw-a:eth2", "mgmt-a:eth1"]
+    - endpoints: ["fw-a:eth3", "isp:eth1"]
+    - endpoints: ["fw-b:eth3", "isp:eth2"]
+    - endpoints: ["fw-b:eth1", "collector:eth1"]
