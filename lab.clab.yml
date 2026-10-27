@@ -1,33 +1,52 @@
-name: bank-lab
+name: rfc5737
+
 topology:
   nodes:
-    fw-a:
+    site-a-host:
       kind: linux
-      image: lab-node:latest
-      cap-add: [NET_ADMIN]
-      binds: [configs/fw-a:/config]
-    fw-b:
+      image: alpine:3.20
+      cmd: sleep infinity
+      exec:
+        - ip link set eth1 up
+        - ip addr add 192.0.2.10/24 dev eth1
+        - ip route add 203.0.113.0/24 via 192.0.2.1 dev eth1
+        - ip route add 198.51.100.0/30 via 192.0.2.1 dev eth1
+
+    gw-a:
       kind: linux
-      image: lab-node:latest
-      cap-add: [NET_ADMIN]
-      binds: [configs/fw-b:/config]
-    isp:
+      image: alpine:3.20
+      cmd: sleep infinity
+      exec:
+        - sysctl -w net.ipv4.ip_forward=1
+        - ip link set eth1 up
+        - ip link set eth2 up
+        - ip addr add 192.0.2.1/24 dev eth1
+        - ip addr add 198.51.100.1/30 dev eth2
+        - ip route add 203.0.113.0/24 via 198.51.100.2 dev eth2
+
+    gw-b:
       kind: linux
-      image: lab-node:latest
-      cap-add: [NET_ADMIN]
-    app-a:
+      image: alpine:3.20
+      cmd: sleep infinity
+      exec:
+        - sysctl -w net.ipv4.ip_forward=1
+        - ip link set eth1 up
+        - ip link set eth2 up
+        - ip addr add 203.0.113.1/24 dev eth1
+        - ip addr add 198.51.100.2/30 dev eth2
+        - ip route add 192.0.2.0/24 via 198.51.100.1 dev eth2
+
+    site-b-host:
       kind: linux
-      image: lab-node:latest
-    mgmt-a:
-      kind: linux
-      image: lab-node:latest
-    collector:
-      kind: linux
-      image: lab-node:latest
-      binds: [configs/collector:/config]
+      image: alpine:3.20
+      cmd: sleep infinity
+      exec:
+        - ip link set eth1 up
+        - ip addr add 203.0.113.10/24 dev eth1
+        - ip route add 192.0.2.0/24 via 203.0.113.1 dev eth1
+        - ip route add 198.51.100.0/30 via 203.0.113.1 dev eth1
+
   links:
-    - endpoints: ["fw-a:eth1", "app-a:eth1"]
-    - endpoints: ["fw-a:eth2", "mgmt-a:eth1"]
-    - endpoints: ["fw-a:eth3", "isp:eth1"]
-    - endpoints: ["fw-b:eth3", "isp:eth2"]
-    - endpoints: ["fw-b:eth1", "collector:eth1"]
+    - endpoints: ["site-a-host:eth1", "gw-a:eth1"]
+    - endpoints: ["gw-a:eth2", "gw-b:eth2"]
+    - endpoints: ["gw-b:eth1", "site-b-host:eth1"]
