@@ -10,7 +10,12 @@ Goal: Learn the Linux terminal, files, directories, permissions, users, and proc
 Tried: Experimenting directories of linux and what I need to use in creating network.
 
 Day 3
-Goal: Start building topology 
+Goal: Start building topology.
     // harder than I anticipated
 Broke: had to delete previous work, cant figure out what is wrong
 Tried: Checking creation log and use AI
+
+Day 4
+Goal: Planning how to execute the task, still learning how YAML coding works.
+Tried: Experimenting YAML file.
+Broke: While saving my works, 
