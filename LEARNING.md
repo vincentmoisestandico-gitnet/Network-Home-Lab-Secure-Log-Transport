@@ -18,4 +18,4 @@ Tried: Checking creation log and use AI
 Day 4
 Goal: Planning how to execute the task, still learning how YAML coding works.
 Tried: Experimenting YAML file.
-Broke: While saving my works, 
+Broke: While saving my works, it promted that there is wrong with json files
