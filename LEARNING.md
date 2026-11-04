@@ -12,7 +12,7 @@ Tried: Experimenting directories of linux and what I need to use in creating net
 Day 3
 Goal: Start building topology.
     // harder than I anticipated
-Broke: had to delete previous work, cant figure out what is wrong
+Broke: had to delete previous work, cant figure out what is wrong, not staging all changes(reason why i cant save my work)
 Tried: Checking creation log and use AI
 
 Day 4
