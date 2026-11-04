@@ -1,6 +1,5 @@
-FROM debian:bookworm-slim
+FROM debian:12
 RUN apt-get update && apt-get install -y --no-install-recommends \
-      iproute2 iputils-ping nftables wireguard-tools wireguard-go \
-      ulogd2 rsyslog netcat-openbsd tcpdump procps ca-certificates \
-    && rm -rf /var/lib/apt/lists/*
+    nftables wireguard-tools iproute2 iputils-ping tcpdump \
+    rsyslog ulogd2 curl procps && rm -rf /var/lib/apt/lists/*
 CMD ["sleep", "infinity"]
