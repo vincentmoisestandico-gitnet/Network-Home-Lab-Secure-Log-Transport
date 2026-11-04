@@ -19,3 +19,8 @@ Day 4
 Goal: Planning how to execute the task, still learning how YAML coding works.
 Tried: Experimenting YAML file.
 Broke: While saving my works, it promted that there is wrong with json files
+
+Day 5
+Goal: Creating Network Topology
+Tried: Downloading containerlab
+    // The main reason I cant run the containerlab extension is because I thought that downloaded it but it failed. Im still getting familiar with using github
