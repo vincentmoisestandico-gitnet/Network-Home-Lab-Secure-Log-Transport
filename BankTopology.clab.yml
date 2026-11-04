@@ -1,0 +1,24 @@
+# Site A (bank DC, zoned)  <->  simulated internet  <->  Site B (log platform)
+# All addresses are RFC 5737 documentation ranges. See README.md.
+name: bank
+topology:
+  defaults:
+    kind: linux
+    image: bank-node:lab
+  nodes:
+    isp:         # stand-in for the public internet; only ever sees WireGuard
+    a-fw:        # Site A firewall: zones, nftables, WireGuard, ulogd, rsyslog
+    a-web:       # DMZ
+    a-app:       # APP
+    a-db:        # DB
+    a-mgmt:      # MGMT
+    b-gw:        # Site B gateway: WireGuard, nftables
+    b-collector: # Site B rsyslog collector
+  links:
+    - endpoints: ["isp:eth1", "a-fw:eth1"]         # A WAN   203.0.113.0/30
+    - endpoints: ["isp:eth2", "b-gw:eth1"]         # B WAN   203.0.113.4/30
+    - endpoints: ["a-fw:eth2", "a-web:eth1"]       # DMZ     192.0.2.0/26
+    - endpoints: ["a-fw:eth3", "a-app:eth1"]       # APP     192.0.2.64/26
+    - endpoints: ["a-fw:eth4", "a-db:eth1"]        # DB      192.0.2.128/26
+    - endpoints: ["a-fw:eth5", "a-mgmt:eth1"]      # MGMT    192.0.2.192/26
+    - endpoints: ["b-gw:eth2", "b-collector:eth1"] # B LAN   198.51.100.0/24
