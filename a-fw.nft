@@ -1,0 +1,31 @@
+# eth1=WAN eth2=DMZ eth3=APP eth4=DB eth5=MGMT wg0=tunnel to Site B
+flush ruleset
+table inet fw {
+  chain input {
+    type filter hook input priority 0; policy drop;
+    ct state established,related accept
+    iif lo accept
+    iifname "eth1" ip saddr 203.0.113.6 udp dport 51820 accept
+    iifname "eth5" icmp type echo-request accept
+    log prefix "A-FW-IN-DROP " group 1 counter drop
+  }
+  chain forward {
+    type filter hook forward priority 0; policy drop;
+    ct state established,related accept
+    iifname "eth5" icmp type echo-request accept
+    iifname "eth2" oifname "eth3" tcp dport 8080 log prefix "A-FW-ALLOW dmz>app " group 1 accept
+    iifname "eth3" oifname "eth4" tcp dport 5432 log prefix "A-FW-ALLOW app>db " group 1 accept
+    iifname "eth5" oifname { "eth2", "eth3", "eth4" } tcp dport 22 log prefix "A-FW-ALLOW mgmt>any:22 " group 1 accept
+    log prefix "A-FW-FWD-DROP " group 1 counter drop
+  }
+  # Fail closed: the only things this box may originate are WireGuard and syslog-over-tunnel.
+  chain output {
+    type filter hook output priority 0; policy drop;
+    ct state established,related accept
+    oif lo accept
+    oifname "eth1" ip daddr 203.0.113.6 udp sport 51820 udp dport 51820 accept
+    oifname "wg0" ip daddr 198.51.100.10 tcp dport 514 accept
+    oifname "wg0" ip daddr 203.0.113.10 icmp type echo-request accept
+    log prefix "A-FW-OUT-DROP " group 1 counter drop
+  }
+}

@@ -1,0 +1,26 @@
+# eth1=WAN eth2=LAN wg0=tunnel to Site A
+flush ruleset
+table inet fw {
+  chain input {
+    type filter hook input priority 0; policy drop;
+    ct state established,related accept
+    iif lo accept
+    iifname "eth1" ip saddr 203.0.113.2 udp dport 51820 accept
+    iifname "wg0" ip saddr 203.0.113.9 icmp type echo-request accept
+    counter drop
+  }
+  chain forward {
+    type filter hook forward priority 0; policy drop;
+    ct state established,related accept
+    iifname "wg0" oifname "eth2" ip saddr 203.0.113.9 ip daddr 198.51.100.10 tcp dport 514 accept
+    counter drop
+  }
+  chain output {
+    type filter hook output priority 0; policy drop;
+    ct state established,related accept
+    oif lo accept
+    oifname "eth1" ip daddr 203.0.113.2 udp sport 51820 udp dport 51820 accept
+    oifname "wg0" icmp type echo-reply accept
+    counter drop
+  }
+}
