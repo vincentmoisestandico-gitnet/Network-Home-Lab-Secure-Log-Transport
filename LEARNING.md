@@ -38,3 +38,6 @@ Learned:
 
 Day 7
 Goal: Find a solution on day 6 problem with docker
+Tried: Install claude.ai to help me solved the problem
+    // use syntax sudo service docker start
+Broke: Failed to start docker
