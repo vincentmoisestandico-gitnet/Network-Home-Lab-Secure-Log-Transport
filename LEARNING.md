@@ -25,3 +25,9 @@ Goal: Creating Network Topology
 Tried: Downloading containerlab
     // The main reason I cant run the containerlab extension is because I thought that downloaded it but it failed. Im still getting familiar with using github
 Broke: cant deploy containerlab
+
+Day 6
+Goal: Deploy the clab.yml
+Tried: using terminal commands to deploy BankTopology.clab.yml
+    //
+Broke: Failed to init the container runtime: Cannot connect to the Docker daemon at unix:///var/run/docker.sock. Is the docker daemon running?.         
