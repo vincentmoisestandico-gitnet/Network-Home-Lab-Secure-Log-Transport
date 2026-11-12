@@ -43,3 +43,4 @@ Tried: Install claude.ai to help me solved the problem
 Broke: Failed to start docker
 
 Day 8: Day 7 goal
+Goal: 
